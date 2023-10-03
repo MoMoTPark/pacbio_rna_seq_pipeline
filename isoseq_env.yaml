@@ -1,0 +1,9 @@
+name: isoseq
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - isoseq=4.0.0=h9ee0642_0
+  - isoseq3=4.0.0=h9ee0642_0
+prefix: YOUR_PATH

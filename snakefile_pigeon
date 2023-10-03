@@ -1,0 +1,50 @@
+## PacBio long-read data processing pipeline (pigeon)
+## Adopted from downstream IsoSeq pipeline
+
+# Note this snakefile should be executed from a directory (e.g., code) within root analysis directory.
+# Hence, relative path is provided with '../' prefix 
+
+# Sample wild cards 
+IDS, = glob_wildcards("../collapse/{id}.collapsed.gff")
+
+# List output files to check for completion
+rule all:
+    input:
+        expand("../pigeon/{id}.collapsed.sorted.gff", id=IDS),
+        expand("../pigeon/{id}.pigeon_classification.txt", id=IDS),
+        expand("../pigeon/{id}.collapsed.sorted.filtered_lite.gff", id=IDS),
+
+# Pigeon sort collapse output gtf
+rule pigeon_sort:
+    input: "../collapse/{id}.collapsed.gff"
+    output: "../pigeon/{id}.collapsed.sorted.gff"
+    conda: "pigeon_env.yaml"
+    benchmark: "../benchmarks/{id}_pigeon_sort.benchmarks"
+    params:
+        log = "../logs/{id}_pigeon_sort.log"
+    shell:'''pigeon sort --log-level TRACE --log-file {params.log} {input} -o {output}'''
+
+# Pigeon classify
+# Classify isoforms into categories
+rule pigeon_classify:
+    input: "../pigeon/{id}.collapsed.sorted.gff"
+    output: "../pigeon/{id}.pigeon_classification.txt"
+    conda: "pigeon_env.yaml"
+    benchmark: "../benchmarks/{id}_pigeon"
+    params:
+        log = "../logs/{id}_pigeon_classify.log",
+        outfile = "{id}.pigeon",
+        abundance = "../collapse/{id}.collapsed.abundance.txt"
+    shell:'''pigeon classify -j 24 --log-level TRACE --log-file {params.log} -d ../pigeon/ -o {params.outfile} --fl {params.abundance} {input} /mnt/pacbio_long_read/ref/Homo_sapiens-GCA_009914755.4-2022_07-genes_chr.sorted.gtf /mnt/pacbio_long_read/ref/Homo_sapiens-GCA_009914755.4-softmasked_chr.fa'''
+
+# Pigeon filter
+# Filter categorised isoforms
+rule pigeon_filter:
+    input: "../pigeon/{id}.pigeon_classification.txt"
+    output: "../pigeon/{id}.collapsed.sorted.filtered_lite.gff"
+    conda: "pigeon_env.yaml"
+    benchmark: "../benchmarks/{id}_pigeon_filter.benchmark"
+    params:
+        log = "../logs/{id}_pigeon_filter.log",
+        isoforms = "../pigeon/{id}.collapsed.sorted.gff",
+    shell:'''pigeon filter --log-level TRACE --log-file {params.log} -j 24 {input} --isoforms {params.isoforms}'''

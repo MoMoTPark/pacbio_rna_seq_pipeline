@@ -1,0 +1,8 @@
+name: lima
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - lima=2.7.1=h9ee0642_0
+prefix: YOUR_PATH

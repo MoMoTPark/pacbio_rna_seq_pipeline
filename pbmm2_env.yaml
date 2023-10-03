@@ -1,0 +1,8 @@
+name: pbmm2
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - pbmm2=1.12.0=h9ee0642_0
+prefix: YOUR_PATH
