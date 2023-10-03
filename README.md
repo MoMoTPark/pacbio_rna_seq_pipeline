@@ -5,6 +5,6 @@ The following pipelines `snakefile` and `snakefile_pigeon` were designed and dev
 * `snakefile` contains the upstream part of the analysis.
 * `snakefile_pigeon` contains the downstream part of the analysis.
 
-However, it is also compatible with bulk RNA-seq PacBio long-read data. Some IsoSeq tools were used as part of this pipeline.
+This pipeline is also compatible with bulk RNA-seq PacBio long-read data.
 
-Since this Snakemake pipeline makes use of conda environments, `.yaml` environment files were also included in this repository. However, prior to use, change `YOUR_PATH` placeholder to your conda path.
+Note these Snakemake pipelines make use of conda environments. `.yaml` environment files are also included in this repository. However, prior to use, switch `prefix: YOUR_PATH` placeholder with your conda path.
