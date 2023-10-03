@@ -2,8 +2,8 @@
 
 The following pipelines `snakefile` and `snakefile_pigeon` were designed and developed to process probe-enriched PacBio long-read RNA-seq data. 
 
-`snakefile` contains the upstream part of the analysis.
-`snakefile_pigeon` contains the downstream part of the analysis.
+* `snakefile` contains the upstream part of the analysis.
+* `snakefile_pigeon` contains the downstream part of the analysis.
 
 However, it is also compatible with bulk RNA-seq PacBio long-read data. Some IsoSeq tools were used as part of this pipeline.
 
